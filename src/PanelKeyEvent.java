@@ -4,8 +4,9 @@ import java.awt.event.*;
 
 public class PanelKeyEvent extends JFrame {
 
-    private JButton jbuttons[];
+    private JButton[] jbuttons ;
     private String buttonNames[] = {"2ndF","DRG","FSE","TAB","OFF","ON","hyp","sin","cos","tan","nCr","CE"};
+    private String buttonNames2[] = {"1","2","3","/","*","%","4","5","6","+","-","=","7","8","9","(",")","!",".","0","^","PI","2*","3*"};
     JTextField textField;
 
     public PanelKeyEvent() {
@@ -42,7 +43,7 @@ public class PanelKeyEvent extends JFrame {
             if(i<12)
                 jbuttons[i] = new JButton(buttonNames[i]);
             else
-                jbuttons[i] = new JButton("?"); //got lazy entering button names :-)
+                jbuttons[i] = new JButton(buttonNames2[j]); //got lazy entering button names :-)
 
             jbuttons[i].addActionListener(new ButtonEventHandler());
 
