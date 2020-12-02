@@ -1,13 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class PanelKeyEvent extends JFrame {
 
-    private JButton[] jbuttons ;
+    private ArrayList<JButton> jbuttons;
     private String buttonNames[] = {"2ndF","DRG","FSE","TAB","OFF","ON","hyp","sin","cos","tan","nCr","CE"};
-    private String buttonNames2[] = {"1","2","3","/","*","%","4","5","6","+","-","=","7","8","9","(",")","!",".","0","^","PI","2*","3*"};
     JTextField textField;
+    JPanel midPanel;
 
     public PanelKeyEvent() {
         super("Demonstrating JPanel");
@@ -23,7 +27,7 @@ public class PanelKeyEvent extends JFrame {
 
         topPanel.add(textField,BorderLayout.NORTH);
 
-        JPanel midPanel = new JPanel(); //this will use a FlowLayout manager by default
+        midPanel = new JPanel(); //this will use a FlowLayout manager by default
 
         JButton leftButton = new JButton("Scientific");
         JButton middleButton = new JButton("Financial");
@@ -37,21 +41,28 @@ public class PanelKeyEvent extends JFrame {
 
         JPanel bottomPanel = new JPanel(new GridLayout(6,6));
 
-        jbuttons = new JButton[36];
+        jbuttons = new ArrayList<JButton>();
 
-        for (int i = 0; i < jbuttons.length; i++) {
+
+        for (int i = 0; i < 36; i++) {
+
+            JButton jButton;
+
             if(i<12)
-                jbuttons[i] = new JButton(buttonNames[i]);
+                jButton = new JButton(buttonNames[i]);
             else
-                jbuttons[i] = new JButton(buttonNames2[j]); //got lazy entering button names :-)
+                jButton = new JButton("?"); //got lazy entering button names :-)
 
-            jbuttons[i].addActionListener(new ButtonEventHandler());
+            jbuttons.add(jButton);
 
-            bottomPanel.add(jbuttons[i]);
+            jButton.addActionListener(new ButtonEventHandler());
+
+            bottomPanel.add(jButton);
         }
 
         add(topPanel,BorderLayout.NORTH);
         add(bottomPanel,BorderLayout.CENTER);
+
 
         textField.addKeyListener(new KeyAdapter() {
 
@@ -74,11 +85,24 @@ public class PanelKeyEvent extends JFrame {
             }
 
             public void keyReleased(KeyEvent e){
-                System.out.println("The " + e.getKeyChar() + " key was just released");
+
+                if(e.getKeyChar()=='b') {
+                    textField.setForeground(Color.BLUE);
+                    textField.setFont(new Font("courier", Font.BOLD, 14));
+                }
             }
 
             public void keyTyped(KeyEvent e){
-                System.out.println("The " + e.getKeyChar() + " key was just typed");
+                if(e.getKeyChar()=='F') {
+                    for(JButton jbutton : jbuttons){
+                        if(jbutton.getText().equals("TAB")){
+                            jbutton.setForeground(Color.GREEN);
+                            break;
+                        }
+
+                    }
+
+                }
             }
 
         });
@@ -97,15 +121,29 @@ public class PanelKeyEvent extends JFrame {
 
         public void actionPerformed(ActionEvent e) {
 
-            if (e.getActionCommand().equals("OFF"))
+            if (e.getActionCommand().equals("OFF")) {
                 textField.setText("");
+            }
             else if (e.getActionCommand().equals("ON")){
                 textField.requestFocus();
             }
             else if(e.getActionCommand().equals("sin"))
                 System.out.println("Sin of " + textField.getText() + " degrees is " +
                         Math.sin(Double.parseDouble(textField.getText())*2*Math.PI/360));
-
+            else if(e.getActionCommand().equals("cos"))
+                System.out.println("Cos of " + textField.getText() + " degrees is " +
+                        Math.cos(Double.parseDouble(textField.getText())*2*Math.PI/360));
+            else if(e.getActionCommand().equals("tan"))
+                System.out.println("Tan of " + textField.getText() + " degrees is " +
+                        Math.tan(Double.parseDouble(textField.getText())*2*Math.PI/360));
+            else if(e.getActionCommand().equals("CE")){
+                textField.setText("");
+                textField.requestFocus();
+            }
+            else if(e.getActionCommand().equals("FSE")) {
+                midPanel.removeAll();
+                validate();
+            }
         }
     }
 }
